@@ -24,8 +24,12 @@ import numpy as np
 from numpy import array
 import pandas as pd
 import sqlite3
+import os
 
-database_filename = 'training_new.db'
+DB_PATH = '/home/nathan/SQLiteDBs'
+os.chdir(DB_PATH)
+
+database_filename = 'LSAD.db'
 
 # Function returns the current time from an SQL query.
 def getCurrentDatetime(conn):
@@ -41,7 +45,6 @@ SELECT_TRAINING_TIMES_QUERY = "SELECT DISTINCT timeCreated FROM 'trainingData' O
 
 # Reading Training Data
 SELECT_TRAINING_QUERY = "SELECT * FROM 'trainingData' WHERE timeCreated=?;"
-
 # Writing calculated coefficients.
 # Column Names match variable names in the C++ program.
 CREATE_TABLE_COEF_QUERY = '''CREATE TABLE IF NOT EXISTS coefficients (

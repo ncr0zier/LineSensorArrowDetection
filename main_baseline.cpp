@@ -163,7 +163,8 @@ void grabLoop(Camera_t & camera, uint8_t * frames_d)
             }
         }
         // Copy the frame to GPU memory.
-        HIP_CHECK(hipMemcpyAsync(frames_d+PIXELS_PER_LINE*IMAGE_HEIGHT*counter, pImageBuffer, PIXELS_PER_LINE*IMAGE_HEIGHT, hipMemcpyHostToDevice));
+        HIP_CHECK(hipMemcpy(frames_d+PIXELS_PER_LINE*IMAGE_HEIGHT*counter, pImageBuffer, PIXELS_PER_LINE*IMAGE_HEIGHT, hipMemcpyHostToDevice));
+        counter++;
     }
 
     // Turn off chunk mode for the camera.

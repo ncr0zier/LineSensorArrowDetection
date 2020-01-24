@@ -48,8 +48,8 @@ int main(int argc, char* argv[]){
 
     // Generate the calibration points.
     std::vector<std::tuple<int,int>> calibrationPoints;
-    for(uint32_t i = 25; i < SCREEN_WIDTH; i += 25 ){
-        for(uint32_t j = 25; j < SCREEN_HEIGHT; j += 25){
+    for(uint32_t i = 100; i < SCREEN_WIDTH; i += 100 ){
+        for(uint32_t j = 100; j < SCREEN_HEIGHT; j += 100){
             calibrationPoints.push_back(std::make_tuple(i,j));
         }
     }
@@ -110,12 +110,6 @@ int main(int argc, char* argv[]){
         // when the camera object goes out of scope.
         char key;
 
-        // Gain control of the mutex while in the main function scope.
-        // May not be necessary, but is intended to prevent it from being modified while the program
-        // is in the main function scope.
-        std::scoped_lock main_lk0(m[0]);
-        std::scoped_lock main_lk1(m[1]);
-
         // Used to index calibrationPoints.
         uint32_t n = 0;
         do {
@@ -143,7 +137,7 @@ int main(int argc, char* argv[]){
 
             // Read a key.
             cin >> key;
-
+            cout << "Entered: " << key << endl;
             // Execute the software trigger on both cameras if the key is t.
             if ( (key == 't' || key == 'T')){
                 // The posible range for pixelCamera0 and pixelCamera1 is 0 - 1024.
@@ -160,7 +154,7 @@ int main(int argc, char* argv[]){
                         cameras[i].ExecuteSoftwareTrigger();
                     }
                 }
-
+                cout << "Waiting for event handlers to unlock.\n";
                 // Event handlers run in a seperate thread.
                 // Wait until the event handlers for both cameras process the frame.
                 std::unique_lock<std::mutex> lk0(m[0]);

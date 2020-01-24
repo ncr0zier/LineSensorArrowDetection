@@ -87,7 +87,8 @@ void writeBaselineToDB(struct BaselineData *& data, const char * filename, const
         SQLite3_CHECK(sqlite3_bind_double(stmt,8,data->stdDevLine[i]),db);
         SQLite3_CHECK(sqlite3_bind_int   (stmt,9,data->thresholdLine[i]),db);
         SQLite3_CHECK(sqlite3_bind_text  (stmt,10,currentDatetime.c_str(),-1,NULL),db);
-
+        //std::cout << "Average: " << data->avgLine[i] << std::endl;
+        //std::cout << sqlite3_expanded_sql(stmt) << std::endl;
         // Execute Statement.
         SQLite3_CHECK(sqlite3_step(stmt),db);
 

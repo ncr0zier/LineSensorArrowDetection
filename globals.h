@@ -25,6 +25,11 @@
 #include <condition_variable>
 #include <mutex>
 
+// Changes needed to more reliabled test for impacts.
+// Wait for one second until continuing to collect frames after drawing a point.
+// When testing for impacts it's difficult to see a single pixel from a distance.
+#define IMPACT_TESTING 1
+
 // The path where DB files are stored.
 #define DB_PATH "/home/nathan/SQLiteDBs"
 

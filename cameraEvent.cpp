@@ -78,7 +78,7 @@ void SoftwareTriggerImageEventHandler::OnImageGrabbed(Camera_t& camera, const Gr
     HIP_CHECK(hipMemcpy(aboveThresholdCount_h[cameraNo], aboveThresholdCount_d[cameraNo], PIXELS_PER_LINE*sizeof(uint32_t), hipMemcpyDeviceToHost));
 
     // Write the number of pixels detected to the terminal.
-    cout << camera.GetDeviceInfo().GetUserDefinedName() <<": Object Detected at the following pixels.\n" << endl;
+    //cout << camera.GetDeviceInfo().GetUserDefinedName() <<": Object Detected at the following pixels.\n" << endl;
     uint32_t totalPixels = 0;
     uint32_t pixelSum = 0;
 
@@ -96,10 +96,12 @@ void SoftwareTriggerImageEventHandler::OnImageGrabbed(Camera_t& camera, const Gr
     if(cameraName == CAMERA_NAME_0 && totalPixels > 0){
         cout << "Set pixelCamera0.\n";
         pixelCamera0 = pixelSum / totalPixels;
+        cout << camera.GetDeviceInfo().GetUserDefinedName() <<": Object Detected at the average pixel above.\n" << endl;
     }
     else if(cameraName == CAMERA_NAME_1 && totalPixels > 0){
         cout << "Set pixelCamera1.\n";
         pixelCamera1 = pixelSum / totalPixels;
+        cout << camera.GetDeviceInfo().GetUserDefinedName() <<": Object Detected at the average pixel above.\n" << endl;
     }
 
     // Unlock the mutex for the camera number in the main loop.
@@ -107,8 +109,8 @@ void SoftwareTriggerImageEventHandler::OnImageGrabbed(Camera_t& camera, const Gr
     cameraEventComplete[cameraNo] = true;
     cv[cameraNo].notify_one();
 
-    // Write the thread if and camera name for the camera event handler.
-    std::cout << "Event Handler Exiting. Thread ID: " << std::this_thread::get_id() << " Camera: " << cameraName << endl;
+    // Write the thread ID and camera name for the camera event handler.
+    //cout << "Event Handler Exiting. Thread ID: " << std::this_thread::get_id() << " Camera: " << cameraName << endl;
 }
 
 // Example of a device-specific handler for image events.

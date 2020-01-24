@@ -51,7 +51,7 @@ void writeDataPointsToDB(std::vector<struct DataPoint> & data, const char * file
         SQLite3_CHECK(sqlite3_bind_int(stmt,2,data[i].y),db);
         SQLite3_CHECK(sqlite3_bind_double(stmt,3,data[i].L45),db);
         SQLite3_CHECK(sqlite3_bind_double(stmt,4,data[i].L90),db);
-        SQLite3_CHECK(sqlite3_bind_text  (stmt,10,currentDatetime.c_str(),-1,NULL),db);
+        SQLite3_CHECK(sqlite3_bind_text  (stmt,5,currentDatetime.c_str(),-1,NULL),db);
 
         // Execute Statement.
         SQLite3_CHECK(sqlite3_step(stmt),db);

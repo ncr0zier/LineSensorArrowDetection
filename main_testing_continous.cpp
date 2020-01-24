@@ -24,6 +24,12 @@
 #include "main_training.h"
 #include "ScreenPositionEstimator.h"
 
+
+
+// Used when testing for impacts because it's difficult to see a single pixel from a distance.
+// The number of pixels bordering the estimated position on the screen in each direction.
+#define PIXEL_BORDER 1
+
 // Namespace for using pylon objects.
 using namespace Pylon;
 using std::cout, std::cin, std::endl, std::cerr;
@@ -45,7 +51,7 @@ int main(int argc, char* argv[]){
 
     // Load coefficients for the fitting equation from an SQLite file.
     ScreenPositionEstimator pixelEstimator;
-    pixelEstimator.loadCoefficients("training.db");
+    pixelEstimator.loadCoefficients(DB_FILENAME);
 
     // Setup SDL and create window.
     const char * title = "Testing Continous";
@@ -99,20 +105,19 @@ int main(int argc, char* argv[]){
         }
 
         // Used to hold the return value from estimatePosition.
+        // xyTuple gets split into x and y.
         std::tuple<int,int> xyTuple;
-
-        // xyTuple is split into x and y.
         uint32_t x = 0;
         uint32_t y = 0;
 
-        while ( cameras[0].IsGrabbing() && cameras[1].IsGrabbing()){
+        while (cameras[0].IsGrabbing() && cameras[1].IsGrabbing()){
             // The posible range for pixelCamera0 and pixelCamera1 is 0 - PIXELS_PER_LINE
             // Set outside that range to mean an object is not detected.
             pixelCamera0 = pixelCamera1 = PIXELS_PER_LINE + 1;
 
             // Execute a software trigger sequentially on both cameras.
             // A new thread for both cameras is created for grabbing and processing the image.
-            for(int i = 0; i < 2; i++) {
+            for(int i = 1; i >= 0; i--) {
                 if (cameras[i].WaitForFrameTriggerReady(500, TimeoutHandling_ThrowException)) {
                     // Execute the software trigger. Wait up to 500 ms for the camera to be ready for trigger.
                     cameraEventComplete[i] = false;
@@ -135,12 +140,22 @@ int main(int argc, char* argv[]){
                 y = std::get<1>(xyTuple);
 
                 // Draw a point in blue.
-                SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
-                SDL_RenderDrawPoint(gRenderer,x,y);
-                SDL_RenderPresent(gRenderer);
-
-                // Report the location of the point after rendering.
-                cout << "Object detected. Point Drawn at (x,y) (" << x << ',' << y<< ")" << endl;
+                if(IMPACT_TESTING){
+                    for(int xi = x - PIXEL_BORDER; xi <= x + PIXEL_BORDER; xi++) {
+                        for(int yi = yi - PIXEL_BORDER; yi <= y +  PIXEL_BORDER; yi++) {
+                            SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
+                            SDL_RenderDrawPoint(gRenderer, xi, yi);
+                            sleep(1);
+                        }
+                    }
+                    std::cout << "Object detected. Point Drawn centered at (x,y) (" << x << ',' << y<< ")" << endl;
+                }
+                else{
+                    SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
+                    SDL_RenderDrawPoint(gRenderer,x,y);
+                    std::cerr << "Object detected. Point Drawn at (x,y) (" << x << ',' << y<< ")" << endl;
+                    SDL_RenderPresent(gRenderer);
+                }
             }
         }
     }
