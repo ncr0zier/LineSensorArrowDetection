@@ -38,13 +38,13 @@ using namespace Basler_GigECameraParams;
 //Camera Settings
 #define CAMERA_NAME_0 "L45"
 #define CAMERA_NAME_1 "L90"
-#define CAMERA_GAIN 800
-#define CAMERA_EXPOSURE_TIME 24
+#define CAMERA_GAIN 625
+#define CAMERA_EXPOSURE_TIME 32
 #define PIXELS_PER_LINE 1024
 #define IMAGE_HEIGHT 256
 
 //Baseline Collection Settings
-#define NUM_SAMPLES 4096
+#define NUM_SAMPLES 1
 
 // Total number of pixel datapoints.
 #define NUM_DATAPOINTS PIXELS_PER_LINE*IMAGE_HEIGHT*NUM_SAMPLES

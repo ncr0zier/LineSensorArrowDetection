@@ -142,20 +142,24 @@ int main(int argc, char* argv[]){
                 // Draw a point in blue.
                 if(IMPACT_TESTING){
                     for(int xi = x - PIXEL_BORDER; xi <= x + PIXEL_BORDER; xi++) {
-                        for(int yi = yi - PIXEL_BORDER; yi <= y +  PIXEL_BORDER; yi++) {
+                        for(int yi = y - PIXEL_BORDER; yi <= y +  PIXEL_BORDER; yi++) {
                             SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
                             SDL_RenderDrawPoint(gRenderer, xi, yi);
-                            sleep(1);
+                            SDL_RenderPresent(gRenderer);
                         }
                     }
+
+                    sleep(1);
                     std::cout << "Object detected. Point Drawn centered at (x,y) (" << x << ',' << y<< ")" << endl;
                 }
                 else{
                     SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
                     SDL_RenderDrawPoint(gRenderer,x,y);
-                    std::cerr << "Object detected. Point Drawn at (x,y) (" << x << ',' << y<< ")" << endl;
                     SDL_RenderPresent(gRenderer);
+                    std::cerr << "Object detected. Point Drawn at (x,y) (" << x << ',' << y<< ")" << endl;
+
                 }
+
             }
         }
     }
@@ -169,9 +173,10 @@ int main(int argc, char* argv[]){
         cin.ignore(cin.rdbuf()->in_avail());
     }
 
-    // Comment the following two lines to disable waiting on exit.
-    cerr << endl << "Press Enter to exit." << endl;
-    while( cin.get() != '\n');
+    // Comment the following three lines to disable waiting on exit.
+    cout << endl << "Press Any key(s) and Enter to exit." << endl;
+    std::string dummyVariable;
+    cin >> dummyVariable;
 
     // Releases all pylon resources.
     PylonTerminate();

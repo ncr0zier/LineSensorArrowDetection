@@ -115,9 +115,10 @@ int main(int argc, char* argv[])
         exitCode = 1;
     }
 
-    // Comment the following two lines to disable waiting on exit.
-    cerr << endl << "Press Enter to exit." << endl;
-    while( cin.get() != '\n');
+    // Comment the following three lines to disable waiting on exit.
+    cout << endl << "Press Any key(s) and Enter to exit." << endl;
+    std::string dummyVariable;
+    cin >> dummyVariable;
 
     // Releases all pylon resources.
     PylonTerminate();

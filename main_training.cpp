@@ -48,8 +48,8 @@ int main(int argc, char* argv[]){
 
     // Generate the calibration points.
     std::vector<std::tuple<int,int>> calibrationPoints;
-    for(uint32_t i = 100; i < SCREEN_WIDTH; i += 100 ){
-        for(uint32_t j = 100; j < SCREEN_HEIGHT; j += 100){
+    for(uint32_t i = 100; i < SCREEN_WIDTH; i += 200 ){
+        for(uint32_t j = 25; j < SCREEN_HEIGHT; j += 100){
             calibrationPoints.push_back(std::make_tuple(i,j));
         }
     }
@@ -154,7 +154,8 @@ int main(int argc, char* argv[]){
                         cameras[i].ExecuteSoftwareTrigger();
                     }
                 }
-                cout << "Waiting for event handlers to unlock.\n";
+
+                //cout << "Waiting for event handlers to unlock.\n";
                 // Event handlers run in a seperate thread.
                 // Wait until the event handlers for both cameras process the frame.
                 std::unique_lock<std::mutex> lk0(m[0]);
@@ -171,14 +172,16 @@ int main(int argc, char* argv[]){
                     cout << "Adding point to dataPoints vector.\n";
                     dataPoints.push_back(currentPoint);
                     cout << "Number of points collected so far: " << dataPoints.size() << endl;
+
+                    // Increment the calibration point index,
+                    n++;
                 }
                 else {
                     cout << "An object was not detected. Trying another (x,y) point.\n";
                 }
             }
 
-            // Increment the calibration point index,
-            n++;
+
         }while ( (key != 'e') && (key != 'E') && n < calibrationPoints.size());
 
         // Write the points to an SQLite file.
@@ -198,7 +201,7 @@ int main(int argc, char* argv[]){
         cin.ignore(cin.rdbuf()->in_avail());
     }
 
-    // Comment the following two lines to disable waiting on exit.
+    // Comment the following three lines to disable waiting on exit.
     cout << endl << "Press Any key(s) and Enter to exit." << endl;
     std::string dummyVariable;
     cin >> dummyVariable;
