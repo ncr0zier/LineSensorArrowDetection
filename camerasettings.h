@@ -44,7 +44,7 @@ using namespace Basler_GigECameraParams;
 #define IMAGE_HEIGHT 256
 
 //Baseline Collection Settings
-#define NUM_SAMPLES 1
+#define NUM_SAMPLES 4096
 
 // Total number of pixel datapoints.
 #define NUM_DATAPOINTS PIXELS_PER_LINE*IMAGE_HEIGHT*NUM_SAMPLES
