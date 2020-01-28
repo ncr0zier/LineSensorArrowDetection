@@ -1,5 +1,11 @@
 # Line Sensor Arrow Detection
-A program to create a sensor baseline, get datapoints for training, generating coefficients for a calibration equation, and using the calibration equation to estimate the position on the screen of an arrow from sensor data. Detecting arrows in flight is a work in progress.
+<li>A program to create a sensor baseline per pixel calculating the average, minimum, maximum, standard deviation, and 
+detection threshold (average minus five times the standard deviation) using several hundred thousand readings. Frames 
+are copied to GPU memory as they're collected and calculations performed using the GPU after collection finishes.</li>
+<li> A program to collect datapoints correllating pixels being blocked and screen position for training a calibration equation (a fourth-order polynomial)</li>
+<li> A python program using scikit-learn's multiple regression algorithm to calculate 30 coefficients needed for the polynomial calibration equation</li>
+<li>A program using the calibration equation to estimate the position on the screen of an arrow from sensor data. </li>
+Detecting arrows in flight is a work in progress. Data is stored and retrieved using SQLite between programs.
 
 
 ## Usage
